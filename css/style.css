@@ -8,7 +8,16 @@
 
 body {
     font-family: 'Poppins', sans-serif;
+    background-image: url('../img/dji_fly_20240712_061708_299_1720779495558_photo_optimized.JPG');
+    background-size: cover;  /* Ajusta la imagen para cubrir toda la pantalla */
+    background-position: center;  /* Centra la imagen */
+    background-repeat: no-repeat;  /* Evita que la imagen se repita */
+    min-height: 100vh;  /* Asegura que el body tenga al menos la altura de la pantalla */
+    width: 100%;
 }
+
+
+
 
 .menu {
     background-color: #1a202c;
