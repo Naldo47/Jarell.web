@@ -8,7 +8,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-image: url('../img/dji_fly_20240712_061708_299_1720779495558_photo_optimized.JPG');
+   background-color: rgb(71, 65, 56);
     background-size: cover;  /* Ajusta la imagen para cubrir toda la pantalla */
     background-position: center;  /* Centra la imagen */
     background-repeat: no-repeat;  /* Evita que la imagen se repita */
@@ -225,15 +225,30 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 3rem;
-    padding: 80px 5%;
+    gap: 20px; /* 🔹 Reduce este valor para acercar más el texto a la imagen */
+    padding: 60px 15%;
     flex-wrap: wrap;
     background-color: #f9f9f9;
   }
   
-  .about-video.reverse {
+.about-video.reverse {
     flex-direction: row-reverse;
   }
+
+.about-video .text-content {
+  flex: 1;
+}
+
+.about-video .image-content {
+  flex: 1;
+}
+
+.about-video img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
   
   .text-content {
     flex: 1 1 450px;
@@ -259,7 +274,7 @@ body {
     display: inline-block;
     background-color: #000;
     color: #fff;
-    padding: 12px 28px;
+    padding: 32px 28px;
     border-radius: 10px;
     text-decoration: none;
     font-weight: 600;
@@ -276,26 +291,37 @@ body {
     max-width: 100%;
   }
   
+
   .image-content img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 10px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-  }
+  max-width: 100%;      /* nunca excede el ancho del contenedor */
+  width: 400px;         /* ancho máximo deseado */
+  height: auto;         /* mantiene proporción */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  object-fit: cover;
+}
+
   
   .image-content img:hover {
     transform: scale(1.02);
   }
   
   /* Responsive */
-  @media (max-width: 768px) {
+
+@media (max-width: 768px) {
+  .image-content img {
+    width: 80%;        /* ocupa 80% del ancho del contenedor en móviles */
+    max-width: 300px;  /* limita aún más si la pantalla es muy pequeña */
+  }
+}
+
+
+  /* @media (max-width: 768px) {
     .about-video,
     .about-video.reverse {
       flex-direction: column;
       padding: 60px 20px;
-    }
+    } */
   
     .text-content, .image-content {
       max-width: 100%;
@@ -308,17 +334,19 @@ body {
     .btn-watch {
       padding: 10px 20px;
     }
-  }
+  
 
 
-  .slideshow-container {
+  
+.slideshow-container {
   position: relative;
-  max-width: 900px;
-  margin: 80px auto; /* separa del menú */
+  width: 100%;
+  max-width: 900px;          /* ancho máximo */
+  margin: 100px auto;        /* separación del menú y centrado */
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  aspect-ratio: 16 / 9; /* forma rectangular */
+  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+  aspect-ratio: 16 / 9;      /* mantiene forma rectangular */
 }
 
 .slide {
@@ -330,16 +358,29 @@ body {
 .slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover;          /* recorta sin deformar */
 }
 
 /* Efecto suave entre imágenes */
 .fade {
   animation-name: fade;
-  animation-duration: 1.5s;
+  animation-duration: 3s;      /* duración más larga */
+  animation-timing-function: ease-in-out; /* transición más suave */
 }
 
+
 @keyframes fade {
-  from { opacity: 0.4 }
-  to { opacity: 1 }
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
+
+
+/* 📱 Ajuste responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .slideshow-container {
+    max-width: 100%;
+    aspect-ratio: 4 / 3;      /* un poco más cuadrado en móviles */
+  }
+}
+
