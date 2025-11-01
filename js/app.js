@@ -53,14 +53,27 @@
 
 })();
 
-let slideIndex = 0;
-showSlides();
+// Slideshow con fade usando clases (más suave y fiable)
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  if (!slides.length) return;
 
-function showSlides() {
-  const slides = document.querySelectorAll(".slide");
-  slides.forEach(slide => slide.style.display = "none");
-  slideIndex++;
-  if (slideIndex > slides.length) slideIndex = 1;
-  slides[slideIndex - 1].style.display = "block";
-  setTimeout(showSlides, 3000); // cambia cada 3 segundos
-}
+  let idx = 0;
+  const show = (i) => {
+    slides.forEach((s, j) => {
+      s.classList.toggle('is-active', j === i);
+    });
+  };
+
+  show(idx); // mostrar el primero
+
+  // auto-play
+  const delay = 4500; // ms por cada slide
+  setInterval(() => {
+    idx = (idx + 1) % slides.length;
+    show(idx);
+  }, delay);
+})();
+
+
+

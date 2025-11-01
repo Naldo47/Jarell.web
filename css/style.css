@@ -45,25 +45,6 @@ body {
     margin-right: 50px; /* ajusta espacio entre logo y menú */
 }
 
-
-
-
-/* .menu_container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 90%;
-    max-width: 1200px;
-    height: 100%;
-    margin: 0 auto;
-} */
-
-/* .menu_links {
-    height: 100%;
-    transition: transform 0.5s;
-    display: flex;
-} */
-
 .menu_links {
     display: flex;
     justify-content: center;
@@ -337,50 +318,48 @@ body {
   
 
 
-  
+  /* 🔹 Slideshow a pantalla completa */
 .slideshow-container {
   position: relative;
-  width: 100%;
-  max-width: 900px;          /* ancho máximo */
-  margin: 100px auto;        /* separación del menú y centrado */
-  border-radius: 12px;
+  width: 100vw;         /* ocupa todo el ancho */
+  height: 100vh;        /* ocupa todo el alto de la ventana */
+  margin: 0;
+  padding: 0;
   overflow: hidden;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-  aspect-ratio: 16 / 9;      /* mantiene forma rectangular */
+  top: 0;
+  left: 0;
+  z-index: 0;           /* debajo del menú */
 }
 
+/* 🔹 Cada slide (imagen) */
 .slide {
-  display: none;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
 }
 
+.slide.is-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* 🔹 Imagen dentro del slide */
 .slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;          /* recorta sin deformar */
-}
-
-/* Efecto suave entre imágenes */
-.fade {
-  animation-name: fade;
-  animation-duration: 3s;      /* duración más larga */
-  animation-timing-function: ease-in-out; /* transición más suave */
+  object-fit: cover;       /* ajusta y recorta sin deformar */
+  object-position: center; /* centra la imagen */
+  display: block;
 }
 
 
-@keyframes fade {
-  0% { opacity: 0; }
-  30% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
 
-
-/* 📱 Ajuste responsive para pantallas pequeñas */
+/* 🔹 Para pantallas pequeñas */
 @media (max-width: 768px) {
   .slideshow-container {
-    max-width: 100%;
-    aspect-ratio: 4 / 3;      /* un poco más cuadrado en móviles */
+    height: 100vh;
   }
 }
-
