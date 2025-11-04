@@ -1,79 +1,83 @@
-(function(){
-    const listElements = document.querySelectorAll(' .menu_item--show');
-    const list = document.querySelector('.menu_links');
-    const menu = document.querySelector('.menu_hamburger');
-
-    const addClick = ()=>{
-       listElements.forEach( element =>{
-       element.addEventListener('click', ()=>{
-
-       let subMenu = element.children[1];
-       let height = 0;
-       element.classList.toggle('menu_item--active');
-
-
-        if(subMenu.clientHeight === 0){
-            height = subMenu.scrollHeight;
-        }
-
-        subMenu.style.height = `${height}px`;
-        
-       });
-    });
-
-    }
-
-        const deleteStyleHeight = ()=>{
-            listElements.forEach(element=>{
-                
-                if(element.children[1].getAttribute('style')){
-                    element.children[1].removeAttribute('style');
-                    element.classList.remove('menu_item--active');
-                }    
-            });
-        }
- 
-
-        window.addEventListener('resize', ()=>{
-            if (window.innerWidth > 800) {
-                deleteStyleHeight();
-                if(list.classList.contains('menu_links--show'))
-                    list.classList.remove('menu_links--show');
-                
-            }else{
-                addClick();
-            }
-        });
-
-        if(window.innerWidth <= 800) {
-            addClick();
-        }
-
-       menu.addEventListener('click', ()=> list.classList.toggle('menu_links--show'));
-
-})();
-
-// Slideshow con fade usando clases (más suave y fiable)
 (function() {
   const slides = document.querySelectorAll('.slide');
   if (!slides.length) return;
 
   let idx = 0;
+  let intervalId = null;
+  const delay = 4500; // ms entre slides
+  let isRunning = false;
+
   const show = (i) => {
     slides.forEach((s, j) => {
       s.classList.toggle('is-active', j === i);
     });
   };
 
-  show(idx); // mostrar el primero
+  const start = () => {
+    if (isRunning) return;
+    isRunning = true;
+    intervalId = setInterval(() => {
+      idx = (idx + 1) % slides.length;
+      show(idx);
+    }, delay);
+  };
 
-  // auto-play
-  const delay = 4500; // ms por cada slide
+  const stop = () => {
+    if (!isRunning) return;
+    clearInterval(intervalId);
+    intervalId = null;
+    isRunning = false;
+  };
+
+  // Inicial
+  show(idx);
+  start();
+
+  // Contenedor (puede ser null si no existe)
+  const container = document.querySelector('.slideshow-container');
+
+  // Usar pointer/touch para compatibilidad móvil/desktop
+  if (container) {
+    container.addEventListener('pointerenter', stop);
+    container.addEventListener('pointerleave', start);
+
+    // touch events: en algunos móviles pointer events no se disparan como esperas
+    container.addEventListener('touchstart', stop, {passive: true});
+    container.addEventListener('touchend', () => {
+      // dar pequeño retraso para que el gesto termine
+      setTimeout(start, 100);
+    }, {passive: true});
+  }
+
+  // Si el usuario hace scroll — reintentar reiniciar (debounced)
+  let scrollTimeout = null;
+  window.addEventListener('scroll', () => {
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      // si por alguna razón no está corriendo, reiniciamos
+      if (!isRunning) start();
+    }, 150);
+  }, {passive: true});
+
+  // Si vuelve la pestaña, aseguramos que se reanude
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      // pequeña espera para evitar race conditions
+      setTimeout(() => { if (!isRunning) start(); }, 100);
+    } else {
+      // opcional: pausar si pestaña oculta
+      stop();
+    }
+  });
+
+  // Seguridad: si por error el interval se pierde, reiniciar cada X segundos si no corre
   setInterval(() => {
-    idx = (idx + 1) % slides.length;
-    show(idx);
-  }, delay);
+    if (!isRunning) start();
+  }, 5000);
+
 })();
+
+
 
 
 
